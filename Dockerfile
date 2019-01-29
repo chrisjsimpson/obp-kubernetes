@@ -16,3 +16,10 @@ RUN mvn -DskipTests -o -B -e -C -T 1C package
 #Get jetty and copy over war file from previous build
 FROM jetty:jre8-alpine
 COPY --from=maven /usr/src/app/target/*.war /var/lib/jetty/webapps/ROOT.war
+
+# Openshift compatibility
+USER root
+RUN apk add --no-cache bash
+ADD entrypoint.sh /
+USER jetty
+CMD ["/bin/bash", "/entrypoint.sh"]
