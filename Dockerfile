@@ -14,10 +14,14 @@ RUN cp /usr/src/OBP-API/obp-api/pom.xml /tmp/pom.xml # For Packaging a local rep
 WORKDIR /usr/src/OBP-API
 RUN cp obp-api/src/main/resources/props/sample.props.template obp-api/src/main/resources/props/default.props
 RUN cp obp-api/src/main/resources/props/test.default.props.template obp-api/src/main/resources/props/test.default.props
-RUN mvn install -pl .,obp-commons
-RUN mvn install -DskipTests -pl obp-api
+RUN mvn -B -pl .,obp-commons -s /usr/share/maven/ref/settings-docker.xml dependency:go-offline # This will result in a cached local repository layer
+RUN mvn -B -DskipTests -pl obp-api -s /usr/share/maven/ref/settings-docker.xml dependency:go-offline # This will result in a cached local repository layer
+#RUN mvn -B -DskipTests -pl obp-api -s /usr/share/maven/ref/settings-docker.xml dependency:resolve # This will result in a cached local repository layer
+RUN mvn install --offline -pl .,obp-commons -s /usr/share/maven/ref/settings-docker.xml
+RUN mvn install --offline -DskipTests -pl obp-api -s /usr/share/maven/ref/settings-docker.xml
 
 
 FROM jetty:jre8-alpine
 # Copy build artifact (.war file) into jetty from 'maven' stage.
 COPY --from=maven /usr/src/OBP-API/obp-api/target/obp-api-1.0.war /var/lib/jetty/webapps/ROOT.war
+USER jetty
