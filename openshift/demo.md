@@ -115,7 +115,7 @@ oc patch deployment obp-deployment --patch "$(cat patch-deployment.yaml)"
 # Authenticate against Open Bank Project
 Retrieve generated consumer key from bootstrap pod:
 ```
-oc cp $(oc get pods -l app=bootstrap -o jsonpath='{.items[0].metadata.name}'):consumerKey.txt ./
+oc cp $(oc get pods -l app=bootstrap -o jsonpath='{.items[0].metadata.name}'):consumerKey.txt ./consumerKey.txt
 ```
 View your consumer key:
 ```
