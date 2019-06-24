@@ -98,7 +98,7 @@ oc exec -it $(oc get pods -l app=bootstrap -o jsonpath='{.items[0].metadata.name
 
 ## Copy assigned user id to local host
 ```
-oc cp $(oc get pods -l app=bootstrap -o jsonpath='{.items[0].metadata.name}'):obp_user_id.txt ./
+oc cp $(oc get pods -l app=bootstrap -o jsonpath='{.items[0].metadata.name}'):obp_user_id.txt ./obp_user_id.txt
 ```
 The user id is now used to create a patched for the deployment to inject this user id into the deployment as a super user id.
 
